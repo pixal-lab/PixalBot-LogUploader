@@ -6,16 +6,18 @@ from datetime import datetime, timedelta
 from tkcalendar import Calendar
 
 
-def select_date():
+def select_date(entry_var):
     top = tk.Toplevel(frame)
-    cal = Calendar(top, font="Arial 14", selectmode="day", locale="es_ES")
-    cal.pack(padx=20, pady=20)
+    print(entry_var)
     
-    def set_date():
-        selected_date.set(cal.get_date())
+    cal = Calendar(top, font="Arial 14", selectmode="day", locale="es_ES")
+    cal.pack()
+    
+    def set_date(i):
+        entry_dates[i].set(cal.get_date())
         top.destroy()
     
-    ok_button = tk.Button(top, text="Aceptar", command=set_date)
+    ok_button = tk.Button(top, text="Aceptar", command=lambda i = entry_var:set_date(i))
     ok_button.pack()
 
 def browse_folder():
@@ -23,24 +25,36 @@ def browse_folder():
     folder_entry.delete(0, tk.END)
     folder_entry.insert(0, folder_path)
 
-def validate_time_input(P):
-    # La función se llama cada vez que se ingresa un carácter en el Entry
-    if re.match(r'^\d{1,2}:\d{2}$', P):
+def validate(user_input):
+    if  user_input.isdigit() or user_input is "":
+        # Fetching minimum and maximum value of the spinbox
+        minval = int(app.nametowidget(spinbox).config('from')[4])
+        maxval = int(app.nametowidget(spinbox).config('to')[4])
+ 
+        # check if the number is within the range
+        if int(user_input) not in range(minval, maxval):
+            print ("Out of range")
+            return False
+ 
+        # Printing the user input to the console
+        print(user_input)
         return True
+ 
     else:
+        print("Not numeric")
         return False
 
 def on_submit():
     folder_path = folder_entry.get().strip()
-    date = date_entry.get().strip()
-    hours = hours_entry.get().strip()
-    minutes = minutes_entry.get().strip()
+    dates = [i.get() for i in entry_dates]
+    times_h = [i.get() for i in entry_h]
+    times_m = [i.get() for i in entry_m]
     link = link_entry.get().strip()
     print("-----")
     print(folder_entry)
-    print(date)
-    print(hours)
-    print(minutes)
+    print(dates)
+    print(times_h)
+    print(times_m)
     print(link)
     print("-----")
     return 0
@@ -100,21 +114,26 @@ def refresh_position():
     link_entry.grid(row=4+ rows, column=1)
     submit_button.grid(row=5+ rows, columnspan=3)
 
+entry_dates = []
+entry_h = []
+entry_m = []
 def add_time():
     global rows
     rows += 2
-    
+
+
     #------- Fecha -------
     time_label = tk.Label(frame, text='Fecha inicio [DD:MM:AA]:')
     time_label.grid(row=1 + rows, column=0, sticky='e')
 
-    date_entry = tk.Entry(frame, textvariable=selected_date,justify="center", width=wEntry)
+    entry_var = tk.StringVar()
+    date_entry = tk.Entry(frame, textvariable=entry_var, justify="center", width=wEntry)
     date_entry.grid(row=1 + rows, column=1)
     date_entry.insert(0, datetime.now().strftime("%d/%m/%y"))
+    entry_dates.append(entry_var)
 
-    select_date_button = tk.Button(frame, text="Calend", command=select_date, width=5)
+    select_date_button = tk.Button(frame, text="Calend", command=lambda i=int(rows/2)-1:select_date(i), width=5)
     select_date_button.grid(row=1 + rows, column=2)
-
 
     #------- Duracion -------
     m_label = tk.Label(frame, text='Duracion [HH:MM]')
@@ -125,6 +144,7 @@ def add_time():
     hours_entry = ttk.Spinbox(frame_time, from_=0, to=24, justify="center", format="%02.0f", width=int(wEntry/2-4))
     hours_entry.grid(row=0, column=0)
     hours_entry.insert(0, "00")
+    entry_h.append(hours_entry)
 
     m_label = tk.Label(frame_time, text=':')
     m_label.grid(row=0, column=1)
@@ -132,6 +152,7 @@ def add_time():
     minutes_entry = ttk.Spinbox(frame_time, from_=0, to=59, justify="center", format="%02.0f", width=int(wEntry/2-4))
     minutes_entry.grid(row=0, column=2)
     minutes_entry.insert(0, "00")
+    entry_m.append(minutes_entry)
 
     refresh_position()
 
@@ -146,7 +167,7 @@ app.title('PixalBot LogUploader')
 frame = tk.Frame(app, padx=20, pady=20)
 frame.grid(row=0, column=0)
 
-selected_date = tk.StringVar()
+
 
 
 #------- ruta -------
@@ -179,8 +200,9 @@ link_entry.grid(row=4+ rows, column=1)
 #------- Enviar -------
 submit_button = tk.Button(frame, text='Enviar', command=on_submit)
 submit_button.grid(row=5+ rows, columnspan=3)
-add_time()
 
+
+add_time()
 app.mainloop()
 
 
