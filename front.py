@@ -26,7 +26,7 @@ def browse_folder():
     folder_entry.insert(0, folder_path)
 
 def validate(user_input):
-    if  user_input.isdigit() or user_input is "":
+    if  user_input.isdigit() or user_input == "":
         # Fetching minimum and maximum value of the spinbox
         minval = int(app.nametowidget(spinbox).config('from')[4])
         maxval = int(app.nametowidget(spinbox).config('to')[4])
@@ -47,12 +47,16 @@ def validate(user_input):
 def on_submit():
     folder_path = folder_entry.get().strip()
     dates = [i.get() for i in entry_dates]
+    times_h0 = [i.get() for i in entry_h0]
+    times_m0 = [i.get() for i in entry_m0]
     times_h = [i.get() for i in entry_h]
     times_m = [i.get() for i in entry_m]
     link = link_entry.get().strip()
     print("-----")
     print(folder_entry)
     print(dates)
+    print(times_h0)
+    print(times_m0)
     print(times_h)
     print(times_m)
     print(link)
@@ -109,17 +113,19 @@ def on_submit():
     file_logs = []
     
 def refresh_position():
-    add_row.grid(row=3 + rows, columnspan=3)
-    link_label.grid(row=4+ rows, column=0, sticky='e')
-    link_entry.grid(row=4+ rows, column=1)
-    submit_button.grid(row=5+ rows, columnspan=3)
+    add_row.grid(row=4 + rows, columnspan=3)
+    link_label.grid(row=5+ rows, column=0, sticky='e')
+    link_entry.grid(row=5+ rows, column=1)
+    submit_button.grid(row=6+ rows, columnspan=3)
 
 entry_dates = []
+entry_h0 = []
+entry_m0 = []
 entry_h = []
 entry_m = []
 def add_time():
     global rows
-    rows += 2
+    rows += 3
 
 
     #------- Fecha -------
@@ -135,11 +141,31 @@ def add_time():
     select_date_button = tk.Button(frame, text="Calend", command=lambda i=int(rows/2)-1:select_date(i), width=5)
     select_date_button.grid(row=1 + rows, column=2)
 
+    #------- hora inicio -------
+    m0_label = tk.Label(frame, text='Hora inicio [HH:MM]')
+    m0_label.grid(row=2 + rows, column=0, sticky='e')
+    frame_time0 = tk.Frame(frame)
+    frame_time0.grid(row=2 + rows, column=1)
+
+    hours0_entry = ttk.Spinbox(frame_time0, from_=0, to=24, justify="center", format="%02.0f", width=int(wEntry/2-4))
+    hours0_entry.grid(row=0, column=0)
+    hours0_entry.insert(0, "00")
+    entry_h0.append(hours0_entry)
+
+    m0_label = tk.Label(frame_time0, text=':')
+    m0_label.grid(row=0, column=1)
+
+    minutes0_entry = ttk.Spinbox(frame_time0, from_=0, to=59, justify="center", format="%02.0f", width=int(wEntry/2-4))
+    minutes0_entry.grid(row=0, column=2)
+    minutes0_entry.insert(0, "00")
+    entry_m0.append(minutes0_entry)
+
+
     #------- Duracion -------
     m_label = tk.Label(frame, text='Duracion [HH:MM]')
-    m_label.grid(row=2 + rows, column=0, sticky='e')
+    m_label.grid(row=3 + rows, column=0, sticky='e')
     frame_time = tk.Frame(frame)
-    frame_time.grid(row=2 + rows, column=1)
+    frame_time.grid(row=3 + rows, column=1)
 
     hours_entry = ttk.Spinbox(frame_time, from_=0, to=24, justify="center", format="%02.0f", width=int(wEntry/2-4))
     hours_entry.grid(row=0, column=0)
@@ -186,20 +212,20 @@ rows = 0
 
 
 add_row = tk.Button(frame, text='Agregar periodo', command=add_time)
-add_row.grid(row=3 + rows, columnspan=3)
+add_row.grid(row=4 + rows, columnspan=3)
 
 
 #------- Link -------
 link_label = tk.Label(frame, text='Enlace:')
-link_label.grid(row=4+ rows, column=0, sticky='e')
+link_label.grid(row=5+ rows, column=0, sticky='e')
 link_entry = tk.Entry(frame, width=wEntry)
-link_entry.grid(row=4+ rows, column=1)
+link_entry.grid(row=5+ rows, column=1)
 
 
 
 #------- Enviar -------
 submit_button = tk.Button(frame, text='Enviar', command=on_submit)
-submit_button.grid(row=5+ rows, columnspan=3)
+submit_button.grid(row=6+ rows, columnspan=3)
 
 
 add_time()
