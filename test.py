@@ -1,30 +1,27 @@
 import tkinter as tk
-from tkcalendar import Calendar
 
-def select_date():
-    top = tk.Toplevel(root)
-    cal = Calendar(top, font="Arial 14", selectmode="day", locale="es_ES")
-    cal.pack(padx=20, pady=20)
-    
-    def set_date():
-        selected_date.set(cal.get_date())
-        top.destroy()
-    
-    ok_button = tk.Button(top, text="Aceptar", command=set_date)
-    ok_button.pack()
+# Función que se ejecuta cuando el valor del Spinbox cambia
+def on_spinbox_change():
+    print("test")
+    new_value = spinbox.get()  # Obtén el nuevo valor del Spinbox
+    # Realiza la validación o edición del valor según sea necesario
+    # Por ejemplo, puedes convertirlo a un número y multiplicarlo por 2:
+    try:
+        new_value = int(new_value) * 2
+    except ValueError:
+        # Manejo de errores si la entrada no es un número válido
+        new_value = 0
+    spinbox.delete(0, 'end')  # Borrar el contenido actual
+    spinbox.insert(0, new_value)  # Establecer el nuevo valor
 
+# Crear la ventana principal
 root = tk.Tk()
-root.title("Selección de Fecha")
 
-selected_date = tk.StringVar()
+# Crear un Spinbox y vincularlo a la función on_spinbox_change
+spinbox = tk.Spinbox(root, from_=0, to=100, command=on_spinbox_change)
+spinbox.pack()
+spinbox = tk.Spinbox(root, from_=0, to=100, command=on_spinbox_change)
+spinbox.pack()
 
-date_label = tk.Label(root, text="Fecha seleccionada:")
-date_label.pack()
-
-date_entry = tk.Entry(root, textvariable=selected_date)
-date_entry.pack()
-
-select_date_button = tk.Button(root, text="Seleccionar Fecha", command=select_date)
-select_date_button.pack()
-
+# Inicializar la ventana
 root.mainloop()

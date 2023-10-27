@@ -7,6 +7,7 @@ from tkcalendar import Calendar
 
 
 def select_date(entry_var):
+    print("-----")
     top = tk.Toplevel(frame)
     print(entry_var)
     
@@ -17,7 +18,7 @@ def select_date(entry_var):
         entry_dates[i].set(cal.get_date())
         top.destroy()
     
-    ok_button = tk.Button(top, text="Aceptar", command=lambda i = entry_var:set_date(i))
+    ok_button = tk.Button(top, text="Aceptar", command=lambda entry = entry_var:set_date(entry))
     ok_button.pack()
 
 def browse_folder():
@@ -25,24 +26,32 @@ def browse_folder():
     folder_entry.delete(0, tk.END)
     folder_entry.insert(0, folder_path)
 
-def validate(user_input):
-    if  user_input.isdigit() or user_input == "":
-        # Fetching minimum and maximum value of the spinbox
-        minval = int(app.nametowidget(spinbox).config('from')[4])
-        maxval = int(app.nametowidget(spinbox).config('to')[4])
- 
-        # check if the number is within the range
-        if int(user_input) not in range(minval, maxval):
-            print ("Out of range")
-            return False
- 
-        # Printing the user input to the console
-        print(user_input)
-        return True
- 
+
+def validationH(e, spinbox):
+    new_value = spinbox.get().strip()
+    if not new_value.isdigit():
+        spinbox.delete(0, 'end')
+        spinbox.insert(0, "00")
     else:
-        print("Not numeric")
-        return False
+        if int(new_value) > 23:
+            spinbox.delete(0, 'end')
+            spinbox.insert(0, 23)
+        else:
+            spinbox.delete(0, 'end')
+            spinbox.insert(0, f'{int(new_value):02d}')
+
+def validationM(e, spinbox):
+    new_value = spinbox.get().strip()
+    if not new_value.isdigit():
+        spinbox.delete(0, 'end')
+        spinbox.insert(0, "00")
+    else:
+        if int(new_value) > 59:
+            spinbox.delete(0, 'end')
+            spinbox.insert(0, 59)
+        else:
+            spinbox.delete(0, 'end')
+            spinbox.insert(0, f'{int(new_value):02d}')
 
 def on_submit():
     folder_path = folder_entry.get().strip()
@@ -125,21 +134,22 @@ entry_h = []
 entry_m = []
 def add_time():
     global rows
+    global vldt_ifnum_cmd
     if int(rows/2)-1 < 9:
         rows += 3
-
+        
 
         #------- Fecha -------
         time_label = tk.Label(frame, text='Fecha inicio [DD:MM:AA]:')
         time_label.grid(row=1 + rows, column=0, sticky='e')
 
         entry_var = tk.StringVar()
-        date_entry = tk.Entry(frame, textvariable=entry_var, justify="center", width=wEntry)
+        date_entry = tk.Entry(frame, textvariable=entry_var, state='disabled', justify="center", width=wEntry)
         date_entry.grid(row=1 + rows, column=1)
-        date_entry.insert(0, datetime.now().strftime("%d/%m/%y"))
+        entry_var.set(datetime.now().strftime("%d/%m/%y"))
         entry_dates.append(entry_var)
 
-        select_date_button = tk.Button(frame, text="Calend", command=lambda i=int(rows/2)-1:select_date(i), width=5)
+        select_date_button = tk.Button(frame, text="Calend", command=lambda i=int(rows/3)-1:select_date(i), width=5)
         select_date_button.grid(row=1 + rows, column=2)
 
         #------- hora inicio -------
@@ -148,7 +158,8 @@ def add_time():
         frame_time0 = tk.Frame(frame)
         frame_time0.grid(row=2 + rows, column=1)
 
-        hours0_entry = ttk.Spinbox(frame_time0, from_=0, to=23,wrap=True, justify="center", format="%02.0f", width=int(wEntry/2-4))
+        hours0_entry = ttk.Spinbox(frame_time0,from_=0, to=23,wrap=True,justify="center",format="%02.0f",width=int(wEntry/2-4))
+        hours0_entry.bind("<FocusOut>", lambda event, spinbox=hours0_entry: validationH(event, spinbox))
         hours0_entry.grid(row=0, column=0)
         hours0_entry.insert(0, "00")
         entry_h0.append(hours0_entry)
@@ -157,6 +168,7 @@ def add_time():
         m0_label.grid(row=0, column=1)
 
         minutes0_entry = ttk.Spinbox(frame_time0, from_=0, to=59,wrap=True, justify="center", format="%02.0f", width=int(wEntry/2-4))
+        minutes0_entry.bind("<FocusOut>", lambda event, spinbox=minutes0_entry: validationM(event, spinbox))
         minutes0_entry.grid(row=0, column=2)
         minutes0_entry.insert(0, "00")
         entry_m0.append(minutes0_entry)
@@ -169,6 +181,7 @@ def add_time():
         frame_time.grid(row=3 + rows, column=1)
 
         hours_entry = ttk.Spinbox(frame_time, from_=0, to=23,wrap=True, justify="center", format="%02.0f", width=int(wEntry/2-4))
+        hours_entry.bind("<FocusOut>", lambda event, spinbox=hours_entry: validationH(event, spinbox))
         hours_entry.grid(row=0, column=0)
         hours_entry.insert(0, "00")
         entry_h.append(hours_entry)
@@ -177,6 +190,7 @@ def add_time():
         m_label.grid(row=0, column=1)
 
         minutes_entry = ttk.Spinbox(frame_time, from_=0, to=59,wrap=True, justify="center", format="%02.0f", width=int(wEntry/2-4))
+        minutes_entry.bind("<FocusOut>", lambda event, spinbox=minutes_entry: validationM(event, spinbox))
         minutes_entry.grid(row=0, column=2)
         minutes_entry.insert(0, "00")
         entry_m.append(minutes_entry)
@@ -190,6 +204,10 @@ entries_date = []
 
 app = tk.Tk()
 app.title('PixalBot LogUploader')
+app.resizable(width=False, height=False)
+
+
+
 
 frame = tk.Frame(app, padx=20, pady=20)
 frame.grid(row=0, column=0)
