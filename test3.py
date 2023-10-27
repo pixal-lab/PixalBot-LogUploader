@@ -1,7 +1,8 @@
 from datetime import datetime, timedelta
 import os
-def listar_archivos_recientes(ruta, tiempo_pasado):
+def listar_archivos_recientes(ruta, tiempo_pasado, duraciones):
     try:
+        cota_sup =[tiempos + duraciones]
         # Obtener la hora actual
         hora_actual = datetime.now()
         # Inicializar una lista para almacenar los archivos recientes
@@ -13,11 +14,9 @@ def listar_archivos_recientes(ruta, tiempo_pasado):
 
                 ruta_completa = os.path.join(root, archivo)
                 tiempo_creacion = datetime.fromtimestamp(os.path.getctime(ruta_completa))
-                for i in tiempo_pasado:
-                    count+=1
+                for i in range(len(tiempo_pasado)):
                     # Calcular la hora límite para archivos recientes
-                    hora_limite = hora_actual - i
-                    if tiempo_creacion > hora_limite and tiempo_creacion < hora_actual:
+                    if tiempo_creacion > tiempo_pasado[i] and tiempo_creacion < cota_sup[i]:
                         archivos_recientes.append(ruta_completa)
                         break
         # Imprimir la lista de archivos recientes
