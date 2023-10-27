@@ -125,62 +125,63 @@ entry_h = []
 entry_m = []
 def add_time():
     global rows
-    rows += 3
+    if int(rows/2)-1 < 9:
+        rows += 3
 
 
-    #------- Fecha -------
-    time_label = tk.Label(frame, text='Fecha inicio [DD:MM:AA]:')
-    time_label.grid(row=1 + rows, column=0, sticky='e')
+        #------- Fecha -------
+        time_label = tk.Label(frame, text='Fecha inicio [DD:MM:AA]:')
+        time_label.grid(row=1 + rows, column=0, sticky='e')
 
-    entry_var = tk.StringVar()
-    date_entry = tk.Entry(frame, textvariable=entry_var, justify="center", width=wEntry)
-    date_entry.grid(row=1 + rows, column=1)
-    date_entry.insert(0, datetime.now().strftime("%d/%m/%y"))
-    entry_dates.append(entry_var)
+        entry_var = tk.StringVar()
+        date_entry = tk.Entry(frame, textvariable=entry_var, justify="center", width=wEntry)
+        date_entry.grid(row=1 + rows, column=1)
+        date_entry.insert(0, datetime.now().strftime("%d/%m/%y"))
+        entry_dates.append(entry_var)
 
-    select_date_button = tk.Button(frame, text="Calend", command=lambda i=int(rows/2)-1:select_date(i), width=5)
-    select_date_button.grid(row=1 + rows, column=2)
+        select_date_button = tk.Button(frame, text="Calend", command=lambda i=int(rows/2)-1:select_date(i), width=5)
+        select_date_button.grid(row=1 + rows, column=2)
 
-    #------- hora inicio -------
-    m0_label = tk.Label(frame, text='Hora inicio [HH:MM]')
-    m0_label.grid(row=2 + rows, column=0, sticky='e')
-    frame_time0 = tk.Frame(frame)
-    frame_time0.grid(row=2 + rows, column=1)
+        #------- hora inicio -------
+        m0_label = tk.Label(frame, text='Hora inicio [HH:MM]')
+        m0_label.grid(row=2 + rows, column=0, sticky='e')
+        frame_time0 = tk.Frame(frame)
+        frame_time0.grid(row=2 + rows, column=1)
 
-    hours0_entry = ttk.Spinbox(frame_time0, from_=0, to=24, justify="center", format="%02.0f", width=int(wEntry/2-4))
-    hours0_entry.grid(row=0, column=0)
-    hours0_entry.insert(0, "00")
-    entry_h0.append(hours0_entry)
+        hours0_entry = ttk.Spinbox(frame_time0, from_=0, to=23,wrap=True, justify="center", format="%02.0f", width=int(wEntry/2-4))
+        hours0_entry.grid(row=0, column=0)
+        hours0_entry.insert(0, "00")
+        entry_h0.append(hours0_entry)
 
-    m0_label = tk.Label(frame_time0, text=':')
-    m0_label.grid(row=0, column=1)
+        m0_label = tk.Label(frame_time0, text=':')
+        m0_label.grid(row=0, column=1)
 
-    minutes0_entry = ttk.Spinbox(frame_time0, from_=0, to=59, justify="center", format="%02.0f", width=int(wEntry/2-4))
-    minutes0_entry.grid(row=0, column=2)
-    minutes0_entry.insert(0, "00")
-    entry_m0.append(minutes0_entry)
+        minutes0_entry = ttk.Spinbox(frame_time0, from_=0, to=59,wrap=True, justify="center", format="%02.0f", width=int(wEntry/2-4))
+        minutes0_entry.grid(row=0, column=2)
+        minutes0_entry.insert(0, "00")
+        entry_m0.append(minutes0_entry)
 
 
-    #------- Duracion -------
-    m_label = tk.Label(frame, text='Duracion [HH:MM]')
-    m_label.grid(row=3 + rows, column=0, sticky='e')
-    frame_time = tk.Frame(frame)
-    frame_time.grid(row=3 + rows, column=1)
+        #------- Duracion -------
+        m_label = tk.Label(frame, text='Duracion [HH:MM]')
+        m_label.grid(row=3 + rows, column=0, sticky='e')
+        frame_time = tk.Frame(frame)
+        frame_time.grid(row=3 + rows, column=1)
 
-    hours_entry = ttk.Spinbox(frame_time, from_=0, to=24, justify="center", format="%02.0f", width=int(wEntry/2-4))
-    hours_entry.grid(row=0, column=0)
-    hours_entry.insert(0, "00")
-    entry_h.append(hours_entry)
+        hours_entry = ttk.Spinbox(frame_time, from_=0, to=23,wrap=True, justify="center", format="%02.0f", width=int(wEntry/2-4))
+        hours_entry.grid(row=0, column=0)
+        hours_entry.insert(0, "00")
+        entry_h.append(hours_entry)
 
-    m_label = tk.Label(frame_time, text=':')
-    m_label.grid(row=0, column=1)
+        m_label = tk.Label(frame_time, text=':')
+        m_label.grid(row=0, column=1)
 
-    minutes_entry = ttk.Spinbox(frame_time, from_=0, to=59, justify="center", format="%02.0f", width=int(wEntry/2-4))
-    minutes_entry.grid(row=0, column=2)
-    minutes_entry.insert(0, "00")
-    entry_m.append(minutes_entry)
+        minutes_entry = ttk.Spinbox(frame_time, from_=0, to=59,wrap=True, justify="center", format="%02.0f", width=int(wEntry/2-4))
+        minutes_entry.grid(row=0, column=2)
+        minutes_entry.insert(0, "00")
+        entry_m.append(minutes_entry)
 
-    refresh_position()
+        refresh_position()
 
 
 
