@@ -20,8 +20,7 @@ root = tk.Tk()
 # Crear un Spinbox y vincularlo a la función on_spinbox_change
 spinbox = tk.Spinbox(root, from_=0, to=100, command=on_spinbox_change)
 spinbox.pack()
-spinbox = tk.Spinbox(root, from_=0, to=100, command=on_spinbox_change)
-spinbox.pack()
+
 
 # Inicializar la ventana
 root.mainloop()

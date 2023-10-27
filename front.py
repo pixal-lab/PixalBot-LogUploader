@@ -40,6 +40,21 @@ def validationH(e, spinbox):
             spinbox.delete(0, 'end')
             spinbox.insert(0, f'{int(new_value):02d}')
 
+def validationH2(e, spinbox):
+    new_value = spinbox.get().strip()
+    if not new_value.isdigit():
+        spinbox.delete(0, 'end')
+        spinbox.insert(0, "00")
+    else:
+        if int(new_value) < 100:
+            print(new_value)
+            spinbox.delete(0, 'end')
+            spinbox.insert(0, f'{int(new_value):02d}')
+        if int(new_value) > 168:
+            spinbox.delete(0, 'end')
+            spinbox.insert(0, 168)
+
+
 def validationM(e, spinbox):
     new_value = spinbox.get().strip()
     if not new_value.isdigit():
@@ -137,10 +152,9 @@ def add_time():
     global vldt_ifnum_cmd
     if int(rows/2)-1 < 9:
         rows += 3
-        
 
         #------- Fecha -------
-        time_label = tk.Label(frame, text='Fecha inicio [DD:MM:AA]:')
+        time_label = tk.Label(frame, text='Fecha inicio:')
         time_label.grid(row=1 + rows, column=0, sticky='e')
 
         entry_var = tk.StringVar()
@@ -180,8 +194,8 @@ def add_time():
         frame_time = tk.Frame(frame)
         frame_time.grid(row=3 + rows, column=1)
 
-        hours_entry = ttk.Spinbox(frame_time, from_=0, to=23,wrap=True, justify="center", format="%02.0f", width=int(wEntry/2-4))
-        hours_entry.bind("<FocusOut>", lambda event, spinbox=hours_entry: validationH(event, spinbox))
+        hours_entry = ttk.Spinbox(frame_time, from_=0, to=24*7,wrap=True, justify="center", format="%02.0f", width=int(wEntry/2-4))
+        hours_entry.bind("<FocusOut>", lambda event, spinbox=hours_entry: validationH2(event, spinbox))
         hours_entry.grid(row=0, column=0)
         hours_entry.insert(0, "00")
         entry_h.append(hours_entry)
@@ -196,8 +210,8 @@ def add_time():
         entry_m.append(minutes_entry)
 
         refresh_position()
-
-
+        if not int(rows/2)-1 < 9:
+            add_row.configure(state='disabled')
 
 wEntry = 20
 entries_date = []
@@ -206,14 +220,8 @@ app = tk.Tk()
 app.title('PixalBot LogUploader')
 app.resizable(width=False, height=False)
 
-
-
-
 frame = tk.Frame(app, padx=20, pady=20)
 frame.grid(row=0, column=0)
-
-
-
 
 #------- ruta -------
 folder_label = tk.Label(frame, text='Ruta de la carpeta:')
@@ -225,14 +233,10 @@ folder_entry.grid(row=0, column=1)
 browse_button = tk.Button(frame, text='Buscar', command=browse_folder, width=5)
 browse_button.grid(row=0, column=2)
 
-
-
 rows = 0
-
 
 add_row = tk.Button(frame, text='Agregar periodo', command=add_time)
 add_row.grid(row=4 + rows, columnspan=3)
-
 
 #------- Link -------
 link_label = tk.Label(frame, text='Enlace:')
@@ -240,16 +244,9 @@ link_label.grid(row=5+ rows, column=0, sticky='e')
 link_entry = tk.Entry(frame, width=wEntry)
 link_entry.grid(row=5+ rows, column=1)
 
-
-
 #------- Enviar -------
 submit_button = tk.Button(frame, text='Enviar', command=on_submit)
 submit_button.grid(row=6+ rows, columnspan=3)
 
-
 add_time()
 app.mainloop()
-
-
-
-

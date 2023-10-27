@@ -1,6 +1,7 @@
 import tkinter as tk
 import re
 import os
+import sys
 import requests
 import time as t
 from tkinter import filedialog
@@ -46,6 +47,7 @@ def listar_archivos_recientes(ruta, tiempo_pasado):
         # Recorrer todos los archivos en la ruta y sus subcarpetas
         for root, dirs, files in os.walk(ruta):
             for archivo in files:
+                count+=1
                 ruta_completa = os.path.join(root, archivo)
                 tiempo_creacion = datetime.fromtimestamp(os.path.getctime(ruta_completa))
                 if tiempo_creacion > hora_limite:
@@ -199,6 +201,7 @@ def on_submit():
 
     link = link_entry.get().strip()
     file_logs = listar_archivos_recientes(folder_path, time)
+    sys.exit()
     wipes = 0
     if file_logs:
         contador = 0
