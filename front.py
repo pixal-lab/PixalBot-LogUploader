@@ -4,12 +4,11 @@ import time as t
 from tkinter import filedialog, ttk
 from datetime import datetime, timedelta
 from tkcalendar import Calendar
+import filesToLinks as fl
 
 
 def select_date(entry_var):
-    print("-----")
     top = tk.Toplevel(frame)
-    print(entry_var)
     
     cal = Calendar(top, font="Arial 14", selectmode="day", locale="es_ES")
     cal.pack()
@@ -47,7 +46,6 @@ def validationH2(e, spinbox):
         spinbox.insert(0, "00")
     else:
         if int(new_value) < 100:
-            print(new_value)
             spinbox.delete(0, 'end')
             spinbox.insert(0, f'{int(new_value):02d}')
         if int(new_value) > 168:
@@ -70,37 +68,30 @@ def validationM(e, spinbox):
 
 def on_submit():
     folder_path = folder_entry.get().strip()
-    dates = [i.get() for i in entry_dates]
-    times_h0 = [i.get() for i in entry_h0]
-    times_m0 = [i.get() for i in entry_m0]
-    times_h = [i.get() for i in entry_h]
-    times_m = [i.get() for i in entry_m]
+    times0 = []
+    times1 = []
+    for i in range(len(entry_dates)): 
+        date_str = entry_dates[i].get()
+        hm_str = entry_h0[i].get()+entry_m0[i].get()
+
+        fecha_obj = datetime.strptime(date_str, '%d/%m/%y')
+        hora_obj = datetime.strptime(hm_str, '%H%M')
+        fecha_obj = fecha_obj.replace(hour=hora_obj.hour, minute=hora_obj.minute)
+        times0.append(fecha_obj)
+
+        delta = timedelta(hours=int(entry_h[i].get()), minutes=int(entry_m[i].get()))
+        times1.append(fecha_obj + delta)
+
     link = link_entry.get().strip()
     print("-----")
-    print(folder_entry)
-    print(dates)
-    print(times_h0)
-    print(times_m0)
-    print(times_h)
-    print(times_m)
+    print(folder_path)
+    print(times0)
+    print(times1)
     print(link)
     print("-----")
+
     return 0
-    hrs = 0
-    min = 0
-
-    try:
-        hrs = int(hours)
-    except:
-        pass
-    try:
-        min = int(minutes)
-    except:
-        pass
-
-    time = timedelta(hours=hrs, minutes=min)
-
-    file_logs = listar_archivos_recientes(folder_path, time)
+    file_logs = fl.listar_archivos_recientes(folder_path, times0, times1)
     wipes = 0
     if file_logs:
         contador = 0

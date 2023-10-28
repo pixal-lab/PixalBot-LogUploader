@@ -44,4 +44,3 @@ def subir_archivo_a_api(url_api, archivo):
 
 
 path = "C:/Users/pbobk/OneDrive/Documentos/Guild Wars 2/addons/arcdps/arcdps.cbtlogs"
-listar_archivos_recientes(path)
