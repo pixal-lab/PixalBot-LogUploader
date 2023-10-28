@@ -1,10 +1,14 @@
 import tkinter as tk
-import re
 import time as t
 from tkinter import filedialog, ttk
 from datetime import datetime, timedelta
 from tkcalendar import Calendar
 import filesToLinks as fl
+from collections import defaultdict
+import discHook as dh
+
+failure = defaultdict(list)
+success = defaultdict(list)
 
 
 def select_date(entry_var):
@@ -83,49 +87,60 @@ def on_submit():
         times1.append(fecha_obj + delta)
 
     link = link_entry.get().strip()
-    print("-----")
-    print(folder_path)
-    print(times0)
-    print(times1)
-    print(link)
-    print("-----")
+    # print("-----")
+    # print(folder_path)
+    # print(times0)
+    # print(times1)
+    # print(link)
+    # print("-----")
 
-    return 0
-    file_logs = fl.listar_archivos_recientes(folder_path, times0, times1)
+
+    file_logs, data_runs = fl.listar_archivos_recientes(folder_path, times0, times1)
+
     wipes = 0
+
+    data = defaultdict(list)    # {ruta : data}
+
+    contador = 0
     if file_logs:
-        contador = 0
-        for log in file_logs:
-            print(contador)
-            contador += 1
-            if contador == 23:
-                t.sleep(60)
-                contador = 0
-            res = subir_archivo_a_api(url_api, log)
-            if res != -1:
-                print(res)
-                data.append(res)
-        print("---xx---")
-        for i in data:
-            print(i)
-            if i[3]:
-                base_success[i[1]].append(i)
+        for run in range(len(file_logs)):
+            for log in range(len(file_logs[run])):
+                if file_logs[run][log][0] in data:
+                    print("Log ya subido")
+                    pass
+                else:
+                    print(f"subiendo log {log + 1}")
+                    if contador > 24:
+                        t.sleep(60)
+                    res = fl.subir_archivo_a_api(url_api, file_logs[run][log][0])
+                    contador += 1
+                    if res != -1:
+                        data[file_logs[run][log][0]] = res
+
+        for i, j in data.items(): # [link, boss, duration, success, isCm]
+            if j[3]:
+                success[j[1]].append(j)
             else:
                 wipes += 1
-                base[i[1]].append(i)
-        print("---xxxxxx---")
-        for i in base_success:
-            print(i)
-        print("---xxxxxx---")
-        for i in base:
-            for j in base[i]:
-                print(j)
-        print("---xxxxxx---")
-        
-        disc_hook(link, wipes)
+                failure[j[1]].append(j)
+        t_runs = []
+        if any(item is not None for item in data_runs):
+            for run in data_runs:
+                total = timedelta(seconds=0)
+                if run != None:
+                    t0 = run[0]
+                    tf = run[2]
+                    df = data[run[1]][2]
+                    total = tf - t0
+                    total = total + timedelta(seconds=df)
+                t_runs.append(total)
+        print(t_runs)
+        if len(t_runs) > 0:
+            dh.send(link, success, failure, t_runs, times0)
+
     else:
-        print('no archivos')
-    file_logs = []
+        print('No archivos')
+
     
 def refresh_position():
     add_row.grid(row=4 + rows, columnspan=3)
@@ -204,8 +219,10 @@ def add_time():
         if not int(rows/2)-1 < 9:
             add_row.configure(state='disabled')
 
+
 wEntry = 20
 entries_date = []
+url_api = "https://dps.report/uploadContent"
 
 app = tk.Tk()
 app.title('PixalBot LogUploader')

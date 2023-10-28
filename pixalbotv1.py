@@ -201,7 +201,6 @@ def on_submit():
 
     link = link_entry.get().strip()
     file_logs = listar_archivos_recientes(folder_path, time)
-    sys.exit()
     wipes = 0
     if file_logs:
         contador = 0
