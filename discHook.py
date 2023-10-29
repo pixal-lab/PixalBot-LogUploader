@@ -5,91 +5,112 @@ import locale
 locale.setlocale(locale.LC_TIME, 'es_ES')
 
 nombres = {
-    "vg": "Vale Guardian",
-    "gors": "Gorseval",
-    "sab": "Sabetha",
-    "sloth": "Slothason",
-    "matt": "Matthias Gabrel",
-    "kc": "Keep Construct",
-    "xera": "Xera",
-    "cairn": "Cairn the Indomitable",
-    "mo": "Mursaat Overseer",
-    "sam": "Samarog",
-    "dei": "Deimos",
-    "sh": "Soulless Horror",
-    "dhuum": "Dhuum",
-    "ca": "Conjured Amalgamate",
-    "twins": "Twin Largos",
-    "qadim": "Qadim",
-    "adina": "Cardinal Adina",
-    "sabir": "Cardinal Sabir",
-    "qpeer": "Qadim the Peerless",
+"vg": "Vale Guardian",
+"gors": "Gorseval",
+"sab": "Sabetha",
+"sloth": "Slothason",
+"matt": "Matthias Gabrel",
+"kc": "Keep Construct",
+"xera": "Xera",
+"cairn": "Cairn the Indomitable",
+"mo": "Mursaat Overseer",
+"sam": "Samarog",
+"dei": "Deimos",
+"sh": "Soulless Horror",
+"dhuum": "Dhuum",
+"ca": "Conjured Amalgamate",
+"twins": "Twin Largos",
+"qadim": "Qadim",
+"adina": "Cardinal Adina",
+"sabir": "Cardinal Sabir",
+"qpeer": "Qadim the Peerless",
+"olc": "Old Lion",
+"trin": "Captain Mai Trin",
+"ankka": "Ankka",
+"li": "Minister Li",
+"void": "Dragon Void",
 }
+def get_full_name(ab):
+    return nombres[ab]
 
-def lunes():
-    hoy = datetime.today()
-    lunes = hoy - timedelta(days=hoy.weekday())
-    return lunes.strftime('%d/%m/%y')
+def wipes_count(failures):
+    count = 0
+    for i in failures:
+        for j in failures[i]:
+            if i in nombres.values():
+                count += 1
+    return count
+
+def check(codigo, success, failure):
+    if get_full_name(codigo) in failure or get_full_name(codigo) in success:
+        return True
+    else:
+        return False
+
 
 def boss(codigo, success, failure):
-    if nombres[codigo] in failure or nombres[codigo] in success:
+    if check(codigo, success, failure):
         wipe = ""
-        if nombres[codigo] in failure:
-            for f in failure[nombres[codigo]]:
+        if get_full_name(codigo) in failure:
+            for f in failure[get_full_name(codigo)]:
                 wipe += " [:x:](" + f[0] + ")"
         y = ""
-        if nombres[codigo] in success:
-            y =" CM" if success[nombres[codigo]][0][4] else ""
-            return "[" + nombres[codigo] + y +"](" + success[nombres[codigo]][0][0] + ")" + wipe
+        if get_full_name(codigo) in success:
+            y =" CM" if success[get_full_name(codigo)][0][4] else ""
+            return "[" + get_full_name(codigo) + y +"](" + success[get_full_name(codigo)][0][0] + ")" + wipe
         else:
-            return nombres[codigo] + y + wipe
+            return get_full_name(codigo) + y + wipe
     else:
-        return nombres[codigo]
+        return get_full_name(codigo)
+
+def wing_check(bosses, success, failure):
+    check_bosses = []
+    for i in bosses:
+        check_bosses.append(check(i, success, failure))
+    if any(check_bosses):
+        return True
+    else:
+        return False
+
+def wing_field(wing, bosses, success, failure):
+        value = ""
+        for i in bosses:
+            if check(i, success, failure):
+                value += boss(i, success, failure) + "\n"
+        value = value[:-1]
+        return { 
+            "name" : wing,
+            "value" : value,
+            "inline" : False}
+    
 
 def send(wHook, success, failure, t_runs, times0):
     hook = Webhook(wHook)
     s = ' , '
     embed = Embed(
-    title = f'Blue Panda Logs {s.join([t.strftime("%d/%m/%y") for t in times0])}',
+    title = f'Panda Logs {s.join([t.strftime("%d/%m/%y") for t in times0])}',
     color = 1694948,
     thumbnail_url = "https://img.freepik.com/premium-vector/cute-red-panda-reading-book-cartoon-icon-illustration-animal-education-icon-concept-isolated-flat-cartoon-style_138676-1295.jpg")
     
-    
-    embed.add_field(
-        name = "W1:",
-        value = boss("vg") + "\n" + boss("gors") + "\n" + boss("sab"),
-        inline = False
-    )
-    embed.add_field(
-        name = "W2:",
-        value = boss("sloth") + "\n" + boss("matt"),
-        inline = False
-    )
-    embed.add_field(
-        name = "W3:",
-        value = boss("kc") + "\n" + boss("xera"),
-        inline = False
-    )
-    embed.add_field(
-        name = "W4:",
-        value = boss("cairn") + "\n" + boss("mo") + "\n" + boss("sam") + "\n" + boss("dei"),
-        inline = False
-    )
-    embed.add_field(
-        name = "W5:",
-        value = boss("sh") + "\n" + boss("dhuum"),
-        inline = False
-    )
-    embed.add_field(
-        name = "W6:",
-        value = boss("ca") + "\n" + boss("twins") + "\n" + boss("qadim"),
-        inline = False
-    )
-    embed.add_field(
-        name = "W7:",
-        value = boss("adina") + "\n" + boss("sabir") + "\n" + boss("qpeer"),
-        inline = False
-    )
+
+    if wing_check(["vg", "gors", "sab"],success, failure):
+        embed.add_field(**wing_field("W1", ["vg", "gors", "sab"], success, failure))
+    if wing_check(["sloth", "matt"],success, failure):
+        embed.add_field(**wing_field("W2", ["sloth", "matt"], success, failure))
+    if wing_check(["kc", "xera"],success, failure):
+        embed.add_field(**wing_field("W3", ["kc", "xera"], success, failure))
+    if wing_check(["cairn", "mo", "sam", "dei"],success, failure):
+        embed.add_field(**wing_field("W4", ["cairn", "mo", "sam", "dei"], success, failure))
+    if wing_check(["sh", "dhuum"],success, failure):
+        embed.add_field(**wing_field("W5", ["sh", "dhuum"], success, failure))
+    if wing_check(["ca", "twins", "qadim"],success, failure):
+        embed.add_field(**wing_field("W6", ["ca", "twins", "qadim"], success, failure))
+    if wing_check(["adina", "sabir", "qpeer"],success, failure):
+        embed.add_field(**wing_field("W7", ["adina", "sabir", "qpeer"], success, failure))
+    if wing_check(["adina", "sabir", "qpeer"],success, failure):
+        embed.add_field(**wing_field("W7", ["adina", "sabir", "qpeer"], success, failure))
+    if wing_check(["olc", "trin", "ankka", "li", "void"],success, failure):
+        embed.add_field(**wing_field("EoD Strikes", ["olc", "trin", "ankka", "li", "void"], success, failure))
 
 
     suma = timedelta(seconds=0)
@@ -108,7 +129,7 @@ def send(wHook, success, failure, t_runs, times0):
         inline = False
     )
     embed.add_field(
-        name = "Wipeos:   " + str(len(failure)) ,
+        name = "Wipeos:   " + str(wipes_count(failure)) ,
         value = "",
         inline = False
     )
@@ -117,12 +138,4 @@ def send(wHook, success, failure, t_runs, times0):
         username = "PixalBot",
         avatar_url = "https://img.freepik.com/vector-premium/cute-red-panda-icon-illustration-estilo-plano-dibujos-animados_138676-1212.jpg?w=826"
     )
-
-
-
-    pass
-
-
-
-    # Convertir la diferencia de tiempo en formato hhmmss
   
