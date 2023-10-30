@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 import requests
 import os
+import time as t
 
 def console_log(console, text):
     console.insert("end", text + "\n")
@@ -21,7 +22,6 @@ def listar_archivos_recientes(console, ruta, t0, t1):
                         if tiempo_creacion > t0[i] and tiempo_creacion < t1[i]:
                             console_log(console,f"Archivo encontrado: {archivo}.")
                             archivos[i].append([ruta_completa, tiempo_creacion])
-        # Imprimir la lista de archivos recientes
 
         for i in range(len(archivos)):
             console_log(console,f"Se encontraron: {len(archivos[i])} logs para la run {i}")
@@ -42,6 +42,10 @@ def subir_archivo_a_api(console, url_api, archivo):
         params = {'json': '1'}
         files = {'file': (archivo, open(archivo, 'rb'))}
         response = requests.post(url_api, params=params, files=files)
+        if response.status_code == 429:
+            console_log(console, "Durmiendo uwu")
+            t.sleep(61)
+            response = requests.post(url_api, params=params, files=files)
         if response.status_code == 200:
             link = response.json()['permalink']
             boss = response.json()['encounter']['boss']

@@ -7,8 +7,8 @@ locale.setlocale(locale.LC_TIME, 'es_ES')
 nombres = {
 "vg": "Vale Guardian",
 "gors": "Gorseval",
-"sab": "Sabetha",
-"sloth": "Slothason",
+"sab": "Sabetha the Saboteur",
+"sloth": "Slothasor",
 "matt": "Matthias Gabrel",
 "kc": "Keep Construct",
 "xera": "Xera",
@@ -105,8 +105,6 @@ def send(wHook, success, failure, t_runs, times0):
         embed.add_field(**wing_field("W5", ["sh", "dhuum"], success, failure))
     if wing_check(["ca", "twins", "qadim"],success, failure):
         embed.add_field(**wing_field("W6", ["ca", "twins", "qadim"], success, failure))
-    if wing_check(["adina", "sabir", "qpeer"],success, failure):
-        embed.add_field(**wing_field("W7", ["adina", "sabir", "qpeer"], success, failure))
     if wing_check(["adina", "sabir", "qpeer"],success, failure):
         embed.add_field(**wing_field("W7", ["adina", "sabir", "qpeer"], success, failure))
     if wing_check(["olc", "trin", "ankka", "li", "void"],success, failure):
