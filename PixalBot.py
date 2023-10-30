@@ -183,7 +183,7 @@ def add_time():
         rows += 3
 
         #------- Fecha -------
-        time_label = tk.Label(frame, text='Fecha inicio:')
+        time_label = tk.Label(frame, text='Start Date:')
         time_label.grid(row=1 + rows, column=0, sticky='e')
 
         entry_var = tk.StringVar()
@@ -196,7 +196,7 @@ def add_time():
         select_date_button.grid(row=1 + rows, column=2)
 
         #------- hora inicio -------
-        m0_label = tk.Label(frame, text='Hora inicio [HH:MM]')
+        m0_label = tk.Label(frame, text='Start Time [HH:MM]')
         m0_label.grid(row=2 + rows, column=0, sticky='e')
         frame_time0 = tk.Frame(frame)
         frame_time0.grid(row=2 + rows, column=1)
@@ -218,7 +218,7 @@ def add_time():
 
 
         #------- Duracion -------
-        m_label = tk.Label(frame, text='Duracion [HH:MM]')
+        m_label = tk.Label(frame, text='Duration [HH:MM]')
         m_label.grid(row=3 + rows, column=0, sticky='e')
         frame_time = tk.Frame(frame)
         frame_time.grid(row=3 + rows, column=1)
@@ -257,28 +257,28 @@ frame = tk.Frame(app, padx=20, pady=20)
 frame.grid(row=0, column=0)
 
 #------- ruta -------
-folder_label = tk.Label(frame, text='Ruta de la carpeta:')
+folder_label = tk.Label(frame, text='Log Directory Path:')
 folder_label.grid(row=0, column=0, sticky='e')
 
 folder_entry = tk.Entry(frame, width=wEntry)
 folder_entry.grid(row=0, column=1)
 
-browse_button = tk.Button(frame, text='Buscar', command=browse_folder, width=5)
+browse_button = tk.Button(frame, text='Search', command=browse_folder, width=5)
 browse_button.grid(row=0, column=2)
 
 
 
-add_row = tk.Button(frame, text='Agregar periodo', command=add_time)
+add_row = tk.Button(frame, text='Add run', command=add_time)
 add_row.grid(row=4 + rows, columnspan=3)
 
 #------- Link -------
-link_label = tk.Label(frame, text='Enlace:')
+link_label = tk.Label(frame, text='Webhook Link:')
 link_label.grid(row=5+ rows, column=0, sticky='e')
 link_entry = tk.Entry(frame, width=wEntry)
 link_entry.grid(row=5+ rows, column=1)
 
 #------- Enviar -------
-submit_button = tk.Button(frame, text='Enviar', command=on_submit)
+submit_button = tk.Button(frame, text='Send', command=on_submit)
 submit_button.grid(row=6+ rows, columnspan=3)
 
 
