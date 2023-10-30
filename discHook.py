@@ -29,6 +29,8 @@ nombres = {
 "ankka": "Ankka",
 "li": "Minister Li",
 "void": "Dragon Void",
+"dagda": "Dagda",
+"cerus": "Cerus",
 }
 def get_full_name(ab):
     return nombres[ab]
@@ -109,6 +111,9 @@ def send(wHook, success, failure, t_runs, times0):
         embed.add_field(**wing_field("W7", ["adina", "sabir", "qpeer"], success, failure))
     if wing_check(["olc", "trin", "ankka", "li", "void"],success, failure):
         embed.add_field(**wing_field("EoD Strikes", ["olc", "trin", "ankka", "li", "void"], success, failure))
+        embed.add_field(**wing_field("W7", ["adina", "sabir", "qpeer"], success, failure))
+    if wing_check(["dagda", "cerus"],success, failure):
+        embed.add_field(**wing_field("SotO Strikes", ["dagda", "cerus"], success, failure))
 
 
     suma = timedelta(seconds=0)
