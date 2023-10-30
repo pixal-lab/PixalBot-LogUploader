@@ -88,7 +88,7 @@ def send(wHook, success, failure, t_runs, times0):
     hook = Webhook(wHook)
     s = ' , '
     embed = Embed(
-    title = f'Panda Logs {s.join([t.strftime("%d/%m/%y") for t in times0])}',
+    title = f'Red Panda Logs {s.join([t.strftime("%d/%m/%y") for t in times0])}',
     color = 1694948,
     thumbnail_url = "https://img.freepik.com/premium-vector/cute-red-panda-reading-book-cartoon-icon-illustration-animal-education-icon-concept-isolated-flat-cartoon-style_138676-1295.jpg")
     
@@ -133,6 +133,7 @@ def send(wHook, success, failure, t_runs, times0):
         value = "",
         inline = False
     )
+    embed.set_footer("Bot by Pixal_ | Pixal.2465")
     hook.send(
         embed = embed,
         username = "PixalBot",
