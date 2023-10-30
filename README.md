@@ -28,7 +28,12 @@ Fill in the fields as follows:
     Webhook Link: https://discord.com/api/webhooks/
     Click the "Send" button to send the log report to Discord.
 
-### Additional Information
+## Supported Bosses
+PixalBot supports the following GW2 raid/strikes bosses for log reporting:
+
+Vale Guardian, Gorseval, Sabetha the Saboteur, Slothasor, Matthias Gabrel, Keep Construct, Xera, Cairn the Indomitable, Mursaat Overseer, Samarog, Deimos, Soulless Horror, Dhuum, Conjured Amalgamate, Twin Largos, Qadim, Cardinal Adina, Cardinal Sabir, Qadim the Peerless, Old Lion, Captain Mai Trin, Ankka, Minister Li, Dragon Void
+
+## Additional Information
 For any questions, issues, or support, please contact the PixalBot development team.
 
 Note: Ensure that you have the necessary permissions and access to the Discord channel where you intend to send the log report. If you encounter any problems or errors, refer to the troubleshooting section or contact the PixalBot support team for assistance.
