@@ -1,3 +1,5 @@
+# [PixalBot LogUploader Download](https://github.com/pixal-lab/PixalBot-LogUploader/raw/main/dist/PixalBot.exe)
+
 # PixalBot User Guide
 PixalBot is a tool that allows you to collect logs from a Guild Wars 2 (GW2) run and upload them to a Discord channel using a webhook. This README provides instructions on how to use PixalBot effectively.
 
