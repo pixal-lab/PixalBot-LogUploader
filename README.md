@@ -33,8 +33,7 @@ Fill in the fields as follows:
 ## Supported Bosses
 PixalBot supports the following GW2 raid/strikes bosses for log reporting:
 
-Vale Guardian, Gorseval, Sabetha the Saboteur, Slothasor, Matthias Gabrel, Keep Construct, Xera, Cairn the Indomitable, Mursaat Overseer, Samarog, Deimos, Soulless Horror, Dhuum, Conjured Amalgamate, Twin Largos, Qadim, Cardinal Adina, Cardinal Sabir, Qadim the Peerless, Old Lion, Captain Mai Trin, Ankka, Minister Li, Dragon Void, Dagda, Cerus.
-
+Vale Guardian, Gorseval, Sabetha the Saboteur, Slothasor, Matthias Gabrel, Keep Construct, Xera, Cairn the Indomitable, Mursaat Overseer, Samarog, Deimos, Soulless Horror, Dhuum, Conjured Amalgamate, Twin Largos, Qadim, Cardinal Adina, Cardinal Sabir, Qadim the Peerless, Old Lion, Captain Mai Trin, Ankka, Minister Li, Dragon Void, Dagda, Cerus, M A M A, Siax the Corrupted, Ensolyss of the Endless Torment, Skorvald the Shattered, Artsariiv, Arkk, Ai, Keeper of the Peak, Kanaxai, Scythe of House Aurkus.
 ## Additional Information
 For any questions, issues, or support, please contact the PixalBot development team.
 
