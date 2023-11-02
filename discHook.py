@@ -61,13 +61,22 @@ def check(codigo, success, failure):
 def boss(codigo, success, failure):
     if check(codigo, success, failure):
         wipe = ""
-        if get_full_name(codigo) in failure:
+        if get_full_name(codigo) in failure and len(failure[get_full_name(codigo)]) > 0:
             for f in failure[get_full_name(codigo)]:
-                wipe += " [:x:](" + f[0] + ")"
+                wipe += " [:x:](" + f.pop(0) + ")"
         y = ""
-        if get_full_name(codigo) in success:
+        if get_full_name(codigo) in success and len(success[get_full_name(codigo)]) > 0:
             y =" CM" if success[get_full_name(codigo)][0][4] else ""
-            return "[" + get_full_name(codigo) + y +"](" + success[get_full_name(codigo)][0][0] + ")" + wipe
+            link = success[get_full_name(codigo)][0][0]
+            success[get_full_name(codigo)].pop(0)
+            cont = 0
+            if codigo == "Ai" and cont == 0:
+                cont += 1
+                return "[Elemental" + get_full_name(codigo) + y +"](" + link + ")" + wipe
+            elif codigo == "Ai" and cont == 1:
+                return "[Dark" + get_full_name(codigo) + y +"](" + link + ")" + wipe
+
+            return "[" + get_full_name(codigo) + y +"](" + link + ")" + wipe
         else:
             return get_full_name(codigo) + y + wipe
     else:
@@ -95,6 +104,7 @@ def wing_field(wing, bosses, success, failure):
     
 
 def send(wHook, success, failure, t_runs, times0):
+    wipes = wipes_count(failure)
     hook = Webhook(wHook)
     s = ' , '
     embed = Embed(
@@ -129,7 +139,7 @@ def send(wHook, success, failure, t_runs, times0):
     if wing_check(["skor", "arriv", "arkk"],success, failure):
         embed.add_field(**wing_field("Fractal 98", ["skor", "arriv", "arkk"], success, failure))
     if wing_check(["ai"],success, failure):
-        embed.add_field(**wing_field("Fractal 99", ["ai"], success, failure))
+        embed.add_field(**wing_field("Fractal 99", ["ai", "ai"], success, failure))
     if wing_check(["kana"],success, failure):
         embed.add_field(**wing_field("Fractal 100", ["kana"], success, failure))
 
@@ -154,7 +164,7 @@ def send(wHook, success, failure, t_runs, times0):
         inline = False
     )
     embed.add_field(
-        name = "Wipeos:   " + str(wipes_count(failure)) ,
+        name = "Wipeos:   " + str(wipes) ,
         value = "",
         inline = False
     )

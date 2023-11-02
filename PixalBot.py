@@ -93,7 +93,7 @@ def on_submit():
     folder_path = folder_entry.get().strip()
     times0 = []
     times1 = []
-    for i in range(len(entry_dates)): 
+    for i in range(len(entry_dates)):
         date_str = entry_dates[i].get()
         hm_str = entry_h0[i].get()+entry_m0[i].get()
 
