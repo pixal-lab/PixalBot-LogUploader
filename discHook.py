@@ -31,6 +31,14 @@ nombres = {
 "void": "Dragon Void",
 "dagda": "Dagda",
 "cerus": "Cerus",
+"mama"  : "M A M A",
+"siax"  : "Siax the Corrupted",
+"enso"  : "Ensolyss of the Endless Torment",
+"skor"  : "Skorvald the Shattered",
+"arriv" : "Artsariiv",
+"arkk"  : "Arkk",
+"ai"    : "Ai",
+"kana"  : "Kanaxai",
 }
 def get_full_name(ab):
     return nombres[ab]
@@ -109,11 +117,25 @@ def send(wHook, success, failure, t_runs, times0):
         embed.add_field(**wing_field("W6", ["ca", "twins", "qadim"], success, failure))
     if wing_check(["adina", "sabir", "qpeer"],success, failure):
         embed.add_field(**wing_field("W7", ["adina", "sabir", "qpeer"], success, failure))
+
     if wing_check(["olc", "trin", "ankka", "li", "void"],success, failure):
         embed.add_field(**wing_field("EoD Strikes", ["olc", "trin", "ankka", "li", "void"], success, failure))
-        embed.add_field(**wing_field("W7", ["adina", "sabir", "qpeer"], success, failure))
+        
     if wing_check(["dagda", "cerus"],success, failure):
         embed.add_field(**wing_field("SotO Strikes", ["dagda", "cerus"], success, failure))
+    
+    if wing_check(["mama", "siax", "enso"],success, failure):
+        embed.add_field(**wing_field("Fractal 97", ["mama", "siax", "enso"], success, failure))
+    if wing_check(["skor", "arriv", "arkk"],success, failure):
+        embed.add_field(**wing_field("Fractal 98", ["skor", "arriv", "arkk"], success, failure))
+    if wing_check(["ai"],success, failure):
+        embed.add_field(**wing_field("Fractal 99", ["ai"], success, failure))
+    if wing_check(["kana"],success, failure):
+        embed.add_field(**wing_field("Fractal 100", ["kana"], success, failure))
+
+
+
+
 
 
     suma = timedelta(seconds=0)

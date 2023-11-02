@@ -52,6 +52,7 @@ def subir_archivo_a_api(console, url_api, archivo):
             duration = response.json()['encounter']['duration']
             success = response.json()['encounter']['success']
             isCm = response.json()['encounter']['isCm']
+            print([link, boss, duration, success, isCm])
             return [link, boss, duration, success, isCm]
         else:
             console_log(console,f"Error al subir el archivo. Código de estado: {response}")
