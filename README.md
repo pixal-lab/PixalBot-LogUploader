@@ -40,4 +40,5 @@ For any questions, issues, or support, please contact the PixalBot development t
 Note: Ensure that you have the necessary permissions and access to the Discord channel where you intend to send the log report. If you encounter any problems or errors, refer to the troubleshooting section or contact the PixalBot support team for assistance.
 
 Discord ID: Pixal_
+
 GW2 account: Pixal.2465
