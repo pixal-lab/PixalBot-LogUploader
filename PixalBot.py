@@ -83,11 +83,11 @@ def load_hook():
     bottom_frame.grid(row=1, column=0, pady=5, padx=10)
     
     # Botón para cargar el valor y nombre seleccionado
-    cargar_boton = tk.Button(bottom_frame, text="Cargar", command=cargar_seleccion)
+    cargar_boton = tk.Button(bottom_frame, text="Load", command=cargar_seleccion)
     cargar_boton.grid(row=0, column=0)
 
     # Botón para eliminar el valor y nombre seleccionado
-    eliminar_boton = tk.Button(bottom_frame, text="Eliminar", command=eliminar_seleccion)
+    eliminar_boton = tk.Button(bottom_frame, text="Delete", command=eliminar_seleccion)
     eliminar_boton.grid(row=0, column=1)
 
 def actualizar_configuracion():
