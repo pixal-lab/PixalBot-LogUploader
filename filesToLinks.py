@@ -47,12 +47,13 @@ def subir_archivo_a_api(console, url_api, archivo):
             t.sleep(61)
             response = requests.post(url_api, params=params, files=files)
         if response.status_code == 200:
+            print(response.json())
             link = response.json()['permalink']
             boss = response.json()['encounter']['boss']
             duration = response.json()['encounter']['duration']
             success = response.json()['encounter']['success']
             isCm = response.json()['encounter']['isCm']
-            print([link, boss, duration, success, isCm])
+            # print([link, boss, duration, success, isCm])
             return [link, boss, duration, success, isCm]
         else:
             console_log(console,f"Error al subir el archivo. Código de estado: {response}")

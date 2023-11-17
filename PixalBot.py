@@ -1,15 +1,103 @@
 import tkinter as tk
-from tkinter import filedialog, ttk, Scrollbar
+from tkinter import filedialog, ttk, Scrollbar, simpledialog
 from datetime import datetime, timedelta
 from tkcalendar import Calendar
 import filesToLinks as fl
 from collections import defaultdict
 import discHook as dh
 import sys, os
+from configparser import ConfigParser
 
 failure = defaultdict(list)
 success = defaultdict(list)
 rows = 0
+config = ConfigParser()
+hooks = []
+configfile = 'PixalBot_config.ini'
+
+def load_config():
+    try:
+        config.read(configfile)
+        for section in config.sections():
+            nombre = config[section]['nombre']
+            valor = config[section]['valor']
+            hooks.append({"nombre": nombre, "valor": valor})
+    except:
+        pass
+
+def save_hook():
+    valor = link_entry.get()
+
+    # Pedir al usuario que ingrese un nombre para el guardado
+    nombre = simpledialog.askstring("Save", "WebHook name")
+
+    if nombre:
+        # Agregar el valor y nombre a la lista
+        hooks.append({"nombre": nombre, "valor": valor})
+
+        # Guardar la lista en un archivo de configuración
+        actualizar_configuracion()
+def load_hook():
+    # Abrir una nueva ventana para seleccionar un valor de la lista
+    ventana_seleccion = tk.Toplevel(app)
+    ventana_seleccion.title('Discord WebHooks')
+    ventana_seleccion.resizable(width=False, height=False)
+    ventana_seleccion.iconbitmap(resource_path("icon.ico"))
+
+    # Crear una listabox para mostrar los valores almacenados
+    lista_box = tk.Listbox(ventana_seleccion, width=70)
+    lista_box.grid(row=0, column=0, pady=5, padx=10, sticky=tk.N+tk.S)
+
+    # Barra de desplazamiento vertical
+    scrollbar = tk.Scrollbar(ventana_seleccion, orient=tk.VERTICAL, command=lista_box.yview)
+    scrollbar.grid(row=0, column=1, sticky=tk.N+tk.S)
+
+    # Configurar la listbox para usar la barra de desplazamiento
+    lista_box.config(yscrollcommand=scrollbar.set)
+
+    # Llenar la listabox con los valores y nombres almacenados
+    for item in hooks:
+        lista_box.insert(tk.END, f"{item['nombre']} - {item['valor']}")
+
+    # Función para cargar el valor y nombre seleccionado
+    def cargar_seleccion():
+        seleccion = lista_box.curselection()
+        if seleccion:
+            item_seleccionado = hooks[seleccion[0]]
+            link_entry.delete(0, tk.END)
+            link_entry.insert(0, item_seleccionado["valor"])
+
+        ventana_seleccion.destroy()
+
+
+    # Función para eliminar el valor y nombre seleccionado
+    def eliminar_seleccion():
+        seleccion = lista_box.curselection()
+        if seleccion:
+            hooks.pop(seleccion[0])
+            lista_box.delete(seleccion)
+            # Actualizar la configuración después de eliminar
+            actualizar_configuracion()
+
+    bottom_frame = tk.Frame(ventana_seleccion)
+    bottom_frame.grid(row=1, column=0, pady=5, padx=10)
+    
+    # Botón para cargar el valor y nombre seleccionado
+    cargar_boton = tk.Button(bottom_frame, text="Cargar", command=cargar_seleccion)
+    cargar_boton.grid(row=0, column=0)
+
+    # Botón para eliminar el valor y nombre seleccionado
+    eliminar_boton = tk.Button(bottom_frame, text="Eliminar", command=eliminar_seleccion)
+    eliminar_boton.grid(row=0, column=1)
+
+def actualizar_configuracion():
+    # Guardar la lista en un archivo de configuración
+    config = ConfigParser()
+    for i, item in enumerate(hooks):
+        config[f'MiSeccion_{i}'] = {'nombre': item['nombre'], 'valor': item['valor']}
+
+    with open(configfile, 'w') as c:
+        config.write(c)
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -168,8 +256,10 @@ def refresh_position():
     add_row.grid(row=4 + rows, columnspan=3)
     link_label.grid(row=5+ rows, column=0, sticky='e')
     link_entry.grid(row=5+ rows, column=1)
+    frame_hook.grid(row=5+ rows, column=2)
     submit_button.grid(row=6+ rows, columnspan=3)
     consfr.grid(row=7+ rows, columnspan=3)
+
 
 entry_dates = []
 entry_h0 = []
@@ -248,6 +338,8 @@ entries_date = []
 url_api = "https://dps.report/uploadContent"
 url_apib = "https://b.dps.report//uploadContent"
 
+load_config()
+
 app = tk.Tk()
 app.title('PixalBot LogUploader')
 app.resizable(width=False, height=False)
@@ -276,6 +368,16 @@ link_label = tk.Label(frame, text='Webhook Link:')
 link_label.grid(row=5+ rows, column=0, sticky='e')
 link_entry = tk.Entry(frame, width=wEntry)
 link_entry.grid(row=5+ rows, column=1)
+
+frame_hook = tk.Frame(frame)
+frame_hook.grid(row=5+ rows, column=2)
+
+save_webhook = tk.Button(frame_hook, text='Save', command=save_hook, width=5)
+save_webhook.grid(row=0, column=0)
+
+load_webhook = tk.Button(frame_hook, text='Load', command=load_hook, width=5)
+load_webhook.grid(row=0, column=1)
+
 
 #------- Enviar -------
 submit_button = tk.Button(frame, text='Send', command=on_submit)
