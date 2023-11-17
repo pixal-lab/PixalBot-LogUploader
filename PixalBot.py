@@ -94,7 +94,7 @@ def actualizar_configuracion():
     # Guardar la lista en un archivo de configuración
     config = ConfigParser()
     for i, item in enumerate(hooks):
-        config[f'MiSeccion_{i}'] = {'nombre': item['nombre'], 'valor': item['valor']}
+        config[f'hook_{i}'] = {'nombre': item['nombre'], 'valor': item['valor']}
 
     with open(configfile, 'w') as c:
         config.write(c)
