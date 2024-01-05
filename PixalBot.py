@@ -369,7 +369,7 @@ add_row.grid(row=4 + rows, columnspan=3)
 
 
 
-d_label = tk.Label(frame, text='Min encounter duration [sec]')
+d_label = tk.Label(frame, text='Min Encounter Duration [Sec]')
 d_label.grid(row=5 + rows, column=0, sticky='e')
 
 d_entry = ttk.Spinbox(frame, from_=0, to=120,wrap=True, justify="center", format="%02.0f", width=int(wEntry-3))

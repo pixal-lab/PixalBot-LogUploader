@@ -13,6 +13,7 @@ Fill in the Required Fields:
 - Start Time: Enter the start time of the run in the "Start Time" field.
 - Duration: Indicate the duration of the run in the "Duration" field.
 - Add Run: If you have additional runs to report, click the "Add Period" button. This allows you to add multiple run reports (up to 7).
+- Min Encounter Duration: Indicate the minimum duration of the encounter on the "Min Encounter Duration" field.
 - Webhook Link: In the "Webhook Link" field, provide the link to the Discord webhook where you want to send the log report.
 - Send: After filling in all the required information, click the "Send" button to send the log report to the specified Discord channel using the webhook.
 
@@ -27,6 +28,7 @@ Fill in the fields as follows:
     Start Date: 30/10/23
     Start Time: 15:30
     Duration: 02:00
+    Min Encounter Duration: 20
     Webhook Link: https://discord.com/api/webhooks/
     Click the "Send" button to send the log report to Discord.
 
