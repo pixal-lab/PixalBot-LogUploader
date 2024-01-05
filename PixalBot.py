@@ -226,11 +226,12 @@ def on_submit():
                         data[file_logs[run][log][0]] = res
         console_log(console, "Logs subidos, haciendo cosas")
         for i, j in data.items(): # [link, boss, duration, success, isCm]
-            if j[3]:
-                success[j[1]].append(j)
-            else:
-                wipes += 1
-                failure[j[1]].append(j)
+            if (j[2] >= int(d_entry.get())):
+                if j[3]:
+                    success[j[1]].append(j)
+                else:
+                    wipes += 1
+                    failure[j[1]].append(j)
         t_runs = []
         console_log(console, "Haciendo más cosas")
         if any(item is not None for item in data_runs):
@@ -254,11 +255,14 @@ def on_submit():
     
 def refresh_position():
     add_row.grid(row=4 + rows, columnspan=3)
-    link_label.grid(row=5+ rows, column=0, sticky='e')
-    link_entry.grid(row=5+ rows, column=1)
-    frame_hook.grid(row=5+ rows, column=2)
-    submit_button.grid(row=6+ rows, columnspan=3)
-    consfr.grid(row=7+ rows, columnspan=3)
+    
+    d_label.grid(row=5 + rows, column=0, sticky='e')
+    d_entry.grid(row=5 + rows, column=1)
+    link_label.grid(row=6+ rows, column=0, sticky='e')
+    link_entry.grid(row=6+ rows, column=1)
+    frame_hook.grid(row=6+ rows, column=2)
+    submit_button.grid(row=7+ rows, columnspan=3)
+    consfr.grid(row=8+ rows, columnspan=3)
 
 
 entry_dates = []
@@ -308,7 +312,7 @@ def add_time():
 
 
         #------- Duracion -------
-        m_label = tk.Label(frame, text='Duration [HH:MM]')
+        m_label = tk.Label(frame, text='Run duration [HH:MM]')
         m_label.grid(row=3 + rows, column=0, sticky='e')
         frame_time = tk.Frame(frame)
         frame_time.grid(row=3 + rows, column=1)
@@ -363,14 +367,25 @@ browse_button.grid(row=0, column=2)
 add_row = tk.Button(frame, text='Add run', command=add_time)
 add_row.grid(row=4 + rows, columnspan=3)
 
+
+
+d_label = tk.Label(frame, text='Min encounter duration [sec]')
+d_label.grid(row=5 + rows, column=0, sticky='e')
+
+d_entry = ttk.Spinbox(frame, from_=0, to=120,wrap=True, justify="center", format="%02.0f", width=int(wEntry-3))
+d_entry.bind("<FocusOut>", lambda event, spinbox=d_entry: validationH2(event, spinbox))
+d_entry.grid(row=5 + rows, column=1)
+d_entry.insert(0, "00")
+
+
 #------- Link -------
 link_label = tk.Label(frame, text='Webhook Link:')
-link_label.grid(row=5+ rows, column=0, sticky='e')
+link_label.grid(row=6+ rows, column=0, sticky='e')
 link_entry = tk.Entry(frame, width=wEntry)
-link_entry.grid(row=5+ rows, column=1)
+link_entry.grid(row=6+ rows, column=1)
 
 frame_hook = tk.Frame(frame)
-frame_hook.grid(row=5+ rows, column=2)
+frame_hook.grid(row=6+ rows, column=2)
 
 save_webhook = tk.Button(frame_hook, text='Save', command=save_hook, width=5)
 save_webhook.grid(row=0, column=0)
@@ -381,11 +396,11 @@ load_webhook.grid(row=0, column=1)
 
 #------- Enviar -------
 submit_button = tk.Button(frame, text='Send', command=on_submit)
-submit_button.grid(row=6+ rows, columnspan=3)
+submit_button.grid(row=7+ rows, columnspan=3)
 
 
 consfr = tk.Frame(frame)
-consfr.grid(row=7+ rows, columnspan=3)
+consfr.grid(row=8+ rows, columnspan=3)
 
 console = tk.Text(consfr, height=10, width=50)
 console.grid(row=0, column=0)
