@@ -47,7 +47,7 @@ def subir_archivo_a_api(console, url_api, archivo):
             t.sleep(61)
             response = requests.post(url_api, params=params, files=files)
         if response.status_code == 200:
-            print(response.json())
+            # print(response.json())
             link = response.json()['permalink']
             boss = response.json()['encounter']['boss']
             duration = response.json()['encounter']['duration']

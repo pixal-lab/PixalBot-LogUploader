@@ -103,12 +103,13 @@ def wing_field(wing, bosses, success, failure):
             "inline" : False}
     
 
-def send(wHook, success, failure, t_runs, times0):
+def send(wHook, success, failure, t_runs, times0, paramet):
     wipes = wipes_count(failure)
-    hook = Webhook(wHook)
     s = ' , '
+    # print(f'{paramet["title"].get()} {s.join([t.strftime("%d/%m/%y") for t in times0])}')
+    hook = Webhook(wHook)
     embed = Embed(
-    title = f'Red Panda Logs {s.join([t.strftime("%d/%m/%y") for t in times0])}',
+    title = f'{paramet["title"].get()} {s.join([t.strftime("%d/%m/%y") for t in times0])}',
     color = 1694948,
     thumbnail_url = "https://img.freepik.com/premium-vector/cute-red-panda-reading-book-cartoon-icon-illustration-animal-education-icon-concept-isolated-flat-cartoon-style_138676-1295.jpg")
     
@@ -146,28 +147,28 @@ def send(wHook, success, failure, t_runs, times0):
 
 
 
-
-
-    suma = timedelta(seconds=0)
-    for i in range(len(t_runs)):
-        if t_runs[i] > timedelta(seconds=0):
-            suma += t_runs[i]
-            embed.add_field(
-                name = f"{times0[i].strftime('%A').capitalize()} {times0[i].strftime('%d')}: {t_runs[i].seconds // 3600:02d}h {t_runs[i].seconds % 3600 // 60:02d}m {t_runs[i].seconds % 60:02d}s",
-                value = "",
-                inline = False
-            )
-    
-    embed.add_field(
-        name = f"Suma: {suma.seconds // 3600:02d}h {suma.seconds % 3600 // 60:02d}m {suma.seconds % 60:02d}s",
-        value = "",
-        inline = False
-    )
-    embed.add_field(
-        name = "Wipeos:   " + str(wipes) ,
-        value = "",
-        inline = False
-    )
+    if(paramet["times"].get()):
+        suma = timedelta(seconds=0)
+        for i in range(len(t_runs)):
+            if t_runs[i] > timedelta(seconds=0):
+                suma += t_runs[i]
+                embed.add_field(
+                    name = f"{times0[i].strftime('%A').capitalize()} {times0[i].strftime('%d')}: {t_runs[i].seconds // 3600:02d}h {t_runs[i].seconds % 3600 // 60:02d}m {t_runs[i].seconds % 60:02d}s",
+                    value = "",
+                    inline = False
+                )
+        
+        embed.add_field(
+            name = f"Suma: {suma.seconds // 3600:02d}h {suma.seconds % 3600 // 60:02d}m {suma.seconds % 60:02d}s",
+            value = "",
+            inline = False
+        )
+    if(paramet["wipes"].get()):
+        embed.add_field(
+            name = "Wipeos:   " + str(wipes) ,
+            value = "",
+            inline = False
+        )
     embed.set_footer("Bot by Pixal_ | Pixal.2465")
     hook.send(
         embed = embed,

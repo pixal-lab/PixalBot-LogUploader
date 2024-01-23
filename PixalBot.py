@@ -2,41 +2,25 @@ import tkinter as tk
 from tkinter import filedialog, ttk, Scrollbar, simpledialog
 from datetime import datetime, timedelta
 from tkcalendar import Calendar
-import filesToLinks as fl
 from collections import defaultdict
-import discHook as dh
 import sys, os
 from configparser import ConfigParser
 
+import filesToLinks as fl
+import discHook as dh
+
+
+
 failure = defaultdict(list)
 success = defaultdict(list)
+paramet = defaultdict(list)
 rows = 0
 config = ConfigParser()
 hooks = []
 configfile = 'PixalBot_config.ini'
 
-def load_config():
-    try:
-        config.read(configfile)
-        for section in config.sections():
-            nombre = config[section]['nombre']
-            valor = config[section]['valor']
-            hooks.append({"nombre": nombre, "valor": valor})
-    except:
-        pass
 
-def save_hook():
-    valor = link_entry.get()
 
-    # Pedir al usuario que ingrese un nombre para el guardado
-    nombre = simpledialog.askstring("Save", "WebHook name")
-
-    if nombre:
-        # Agregar el valor y nombre a la lista
-        hooks.append({"nombre": nombre, "valor": valor})
-
-        # Guardar la lista en un archivo de configuración
-        actualizar_configuracion()
 def load_hook():
     # Abrir una nueva ventana para seleccionar un valor de la lista
     ventana_seleccion = tk.Toplevel(app)
@@ -98,6 +82,29 @@ def actualizar_configuracion():
 
     with open(configfile, 'w') as c:
         config.write(c)
+
+def save_hook():
+    valor = link_entry.get()
+
+    # Pedir al usuario que ingrese un nombre para el guardado
+    nombre = simpledialog.askstring("Save", "WebHook name")
+
+    if nombre:
+        # Agregar el valor y nombre a la lista
+        hooks.append({"nombre": nombre, "valor": valor})
+
+        # Guardar la lista en un archivo de configuración
+        actualizar_configuracion()
+
+def load_config():
+    try:
+        config.read(configfile)
+        for section in config.sections():
+            nombre = config[section]['nombre']
+            valor = config[section]['valor']
+            hooks.append({"nombre": nombre, "valor": valor})
+    except:
+        pass
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -174,8 +181,27 @@ def validationM(e, spinbox):
             spinbox.delete(0, 'end')
             spinbox.insert(0, f'{int(new_value):02d}')
 
-def on_submit():
+def msgConfig():
+    # Abrir una nueva ventana para seleccionar un valor de la lista
+    mconfigw = tk.Toplevel(app)
+    mconfigw.title('Discord Message Config')
+    mconfigw.resizable(width=False, height=False)
+    mconfigw.iconbitmap(resource_path("icon.ico"))
 
+    confframe = tk.Frame(mconfigw, padx=20, pady=20)
+    confframe.grid(row=0, column=0)
+
+    Title_label = tk.Label(confframe, text='Title run:')
+    Title_label.grid(row=0, column=0, sticky='e')
+    Title_entry = tk.Entry(confframe, textvariable=paramet["title"], width=wEntry*2)
+    Title_entry.grid(row=0, column=1)
+    
+    times_entry = ttk.Checkbutton(confframe, text="Show duration of the runs.", variable=paramet['times'])
+    times_entry.grid(row=1, column=0, columnspan=2)
+    times_entry = ttk.Checkbutton(confframe, text="Show wipes count.", variable=paramet['wipes'])
+    times_entry.grid(row=2, column=0, columnspan=2)
+
+def on_submit():
     success.clear()
     failure.clear()
     folder_path = folder_entry.get().strip()
@@ -246,7 +272,7 @@ def on_submit():
                 t_runs.append(total)
         if len(t_runs) > 0:
             console_log(console, "Enviando a Discord")
-            dh.send(link, success, failure, t_runs, times0)
+            dh.send(link, success, failure, t_runs, times0, paramet)
             console_log(console, ":)")
 
     else:
@@ -261,7 +287,7 @@ def refresh_position():
     link_label.grid(row=6+ rows, column=0, sticky='e')
     link_entry.grid(row=6+ rows, column=1)
     frame_hook.grid(row=6+ rows, column=2)
-    submit_button.grid(row=7+ rows, columnspan=3)
+    buttonsFrame.grid(row=7+ rows, columnspan=3)
     consfr.grid(row=8+ rows, columnspan=3)
 
 
@@ -394,10 +420,20 @@ load_webhook = tk.Button(frame_hook, text='Load', command=load_hook, width=5)
 load_webhook.grid(row=0, column=1)
 
 
-#------- Enviar -------
-submit_button = tk.Button(frame, text='Send', command=on_submit)
-submit_button.grid(row=7+ rows, columnspan=3)
 
+paramet['title'] = tk.StringVar(value="Red Panda Logs")
+paramet['times'] = tk.BooleanVar(value=True)
+paramet['wipes'] = tk.BooleanVar(value=True)
+#------- Enviar -------
+
+buttonsFrame = tk.Frame(frame,padx=5, pady=5)
+buttonsFrame.grid(row=7+ rows, columnspan=3)
+
+config_button = tk.Button(buttonsFrame, text='Msg config', command=msgConfig, padx=5)
+config_button.grid(row=0, column=0)
+
+submit_button = tk.Button(buttonsFrame, text='Send', command=on_submit, padx=5)
+submit_button.grid(row=0, column=1)
 
 consfr = tk.Frame(frame)
 consfr.grid(row=8+ rows, columnspan=3)
