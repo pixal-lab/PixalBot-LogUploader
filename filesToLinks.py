@@ -37,6 +37,10 @@ def listar_archivos_recientes(console, ruta, t0, t1):
     except Exception as e:
         console_log(console,f"Error: {e}")
 
+def extraerFinal(url):
+    'https://dps.report/0yyK-20250129-004747_ura'
+    return url.split("_")[-1]
+
 def subir_archivo_a_api(console, url_api, archivo):
     try:
         params = {'json': '1'}
@@ -47,13 +51,22 @@ def subir_archivo_a_api(console, url_api, archivo):
             t.sleep(61)
             response = requests.post(url_api, params=params, files=files)
         if response.status_code == 200:
-            # print(response.json())
             link = response.json()['permalink']
-            boss = response.json()['encounter']['boss']
+            if response.json()['encounter']['boss'] == 'DPS.Report':
+                id = link.split("_")[-1]
+                if id == "ura":
+                    boss = "Ura, the Steamshrieker"
+                elif id == "deci":
+                    boss = "Decima, the Stormsinger"
+                elif id == "greer":
+                    boss = "Greer, the Blightbringer"
+            else:
+                boss = response.json()['encounter']['boss']
             duration = response.json()['encounter']['duration']
             success = response.json()['encounter']['success']
             isCm = response.json()['encounter']['isCm']
             # print([link, boss, duration, success, isCm])
+            # print(response.json())
             return [link, boss, duration, success, isCm]
         else:
             console_log(console,f"Error al subir el archivo. Código de estado: {response}")

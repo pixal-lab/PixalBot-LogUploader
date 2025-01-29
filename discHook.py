@@ -24,6 +24,9 @@ nombres = {
 "adina": "Cardinal Adina",
 "sabir": "Cardinal Sabir",
 "qpeer": "Qadim the Peerless",
+"deci": "Decima, the Stormsinger",
+"greer": "Greer, the Blightbringer",
+"ura": "Ura, the Steamshrieker",
 "olc": "Old Lion",
 "trin": "Captain Mai Trin",
 "ankka": "Ankka",
@@ -128,6 +131,8 @@ def send(wHook, success, failure, t_runs, times0, paramet):
         embed.add_field(**wing_field("W6", ["ca", "twins", "qadim"], success, failure))
     if wing_check(["adina", "sabir", "qpeer"],success, failure):
         embed.add_field(**wing_field("W7", ["adina", "sabir", "qpeer"], success, failure))
+    if wing_check(["deci", "greer", "ura"],success, failure):
+        embed.add_field(**wing_field("W8", ["deci", "greer", "ura"], success, failure))
 
     if wing_check(["olc", "trin", "ankka", "li", "void"],success, failure):
         embed.add_field(**wing_field("EoD Strikes", ["olc", "trin", "ankka", "li", "void"], success, failure))

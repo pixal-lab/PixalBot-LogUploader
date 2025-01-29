@@ -260,12 +260,15 @@ def on_submit():
                     failure[j[1]].append(j)
         t_runs = []
         console_log(console, "Haciendo más cosas")
+        print(data_runs)
+        print(data)
         if any(item is not None for item in data_runs):
             for run in data_runs:
                 total = timedelta(seconds=0)
                 if run != None:
                     t0 = run[0]
                     tf = run[2]
+                    print(data[run[1]])
                     df = data[run[1]][2]
                     total = tf - t0
                     total = total + timedelta(seconds=df)
